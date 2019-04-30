@@ -1,6 +1,7 @@
 //Using React Context - App Provider is the State manager of the app
 
 import React from "react";
+const cc = require("cryptocompare");
 
 //Create a new React context for us
 export const AppContext = React.createContext();
@@ -15,6 +16,17 @@ export class AppProvider extends React.Component {
       confirmFavorites: this.confirmFavorites
     };
   }
+
+  componentDidMount = () => {
+    this.fetchCoins();
+  };
+
+  fetchCoins = async () => {
+    //Data returns all the coins
+    let coinList = (await cc.coinList()).Data;
+    this.setState({ coinList });
+  };
+
   //Arrow function binds to the 'this' property
   confirmFavorites = () => {
     this.setState({
