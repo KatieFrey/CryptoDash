@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 //import logo from "./logo.svg";
 import "./App.css";
-import WelcomeMessage from "./WelcomeMessage";
 import AppLayout from "./AppLayout";
 import AppBar from "./AppBar";
 import { AppProvider } from "./AppProvider";
+import Settings from "../Settings";
 //import styled, { css } from "styled-components";
 
 class App extends Component {
@@ -12,10 +12,9 @@ class App extends Component {
     return (
       <div>
         <AppLayout>
-          {" "}
           <AppProvider>
             <AppBar />
-            <WelcomeMessage />{" "}
+            <Settings />
           </AppProvider>
         </AppLayout>
       </div>
