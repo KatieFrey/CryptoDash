@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { blue } from "ansi-colors";
+import { AppContext } from "./AppProvider";
+//import { blue } from "ansi-colors";
 
 const Logo = styled.div`
   font-size: 1.5em;
@@ -26,9 +27,15 @@ function toProperCase(lower) {
 }
 
 //{name} - extract the names from the props
-function ControlButton({ name, active }) {
+function ControlButton({ name }) {
   return (
-    <ControlButtonElem active={active}>{toProperCase(name)}</ControlButtonElem>
+    <AppContext.Consumer>
+      {({ page, setPage }) => (
+        <ControlButtonElem active={page === name} onClick={() => setPage(name)}>
+          {toProperCase(name)}
+        </ControlButtonElem>
+      )}
+    </AppContext.Consumer>
   );
 }
 

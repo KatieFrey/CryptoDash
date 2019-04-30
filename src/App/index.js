@@ -4,7 +4,8 @@ import "./App.css";
 import WelcomeMessage from "./WelcomeMessage";
 import AppLayout from "./AppLayout";
 import AppBar from "./AppBar";
-import styled, { css } from "styled-components";
+import { AppProvider } from "./AppProvider";
+//import styled, { css } from "styled-components";
 
 class App extends Component {
   render() {
@@ -12,8 +13,10 @@ class App extends Component {
       <div>
         <AppLayout>
           {" "}
-          <AppBar />
-          <WelcomeMessage />{" "}
+          <AppProvider>
+            <AppBar />
+            <WelcomeMessage />{" "}
+          </AppProvider>
         </AppLayout>
       </div>
     );
