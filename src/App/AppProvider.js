@@ -28,12 +28,32 @@ export class AppProvider extends React.Component {
 
   componentDidMount = () => {
     this.fetchCoins();
+    this.fetchPrices();
   };
 
   fetchCoins = async () => {
     //Data returns all the coins
     let coinList = (await cc.coinList()).Data;
     this.setState({ coinList });
+  };
+
+  fetchPrices = async () => {
+    if (this.state.firstVisit) return;
+    let prices = await this.prices();
+    this.setState({ prices });
+  };
+
+  prices = async () => {
+    let returnData = [];
+    for (let i = 0; i < this.state.favorites.length; i++) {
+      try {
+        let priceData = await cc.priceFull(this.state.favorites[i], "USD");
+        returnData.push(priceData);
+      } catch (e) {
+        console.warn("Fetch price error: ", e);
+      }
+    }
+    return returnData;
   };
 
   addCoin = key => {
@@ -53,10 +73,15 @@ export class AppProvider extends React.Component {
 
   //Arrow function binds to the 'this' property
   confirmFavorites = () => {
-    this.setState({
-      firstVisit: false,
-      page: "dashboard"
-    });
+    this.setState(
+      {
+        firstVisit: false,
+        page: "dashboard"
+      },
+      () => {
+        this.fetchPrices();
+      }
+    );
     localStorage.setItem(
       "cryptoDash",
       JSON.stringify({
@@ -72,9 +97,9 @@ export class AppProvider extends React.Component {
         page: "settings",
         firstVisit: true
       };
-      let { favorites } = cryptoDashData;
-      return { favorites };
     }
+    let { favorites, currentFavorite } = cryptoDashData;
+    return { favorites, currentFavorite };
   }
 
   setPage = page => this.setState({ page });
