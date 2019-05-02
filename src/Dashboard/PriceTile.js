@@ -40,6 +40,13 @@ const PriceTileStyled = styled(SelectableTile)`
       grid-template-columns: repeat(3, 1fr);
       justify-items: right;
     `}
+
+  ${props =>
+    props.currentFavorite &&
+    css`
+      ${greenBoxShadow}
+      pointer-events: none;
+    `}
 `;
 
 const ChangePercent = ({ data }) => {
@@ -52,9 +59,12 @@ const ChangePercent = ({ data }) => {
   );
 };
 
-const PriceTile = ({ sym, data }) => {
+const PriceTile = ({ sym, data, currentFavorite, setCurrentFavorite }) => {
   return (
-    <PriceTileStyled>
+    <PriceTileStyled
+      onClick={setCurrentFavorite}
+      currentFavorite={currentFavorite}
+    >
       <CoinHeaderGridStyled>
         <div>{sym}</div>
         <ChangePercent data={data} />
@@ -64,9 +74,18 @@ const PriceTile = ({ sym, data }) => {
   );
 };
 
-const PriceTileCompact = ({ sym, data }) => {
+const PriceTileCompact = ({
+  sym,
+  data,
+  currentFavorite,
+  setCurrentFavorite
+}) => {
   return (
-    <PriceTileStyled compact>
+    <PriceTileStyled
+      onClick={setCurrentFavorite}
+      compact
+      currentFavorite={currentFavorite}
+    >
       <JustifyLeft>{sym}</JustifyLeft>
       <ChangePercent data={data} />
 
@@ -79,5 +98,16 @@ export default ({ price, index }) => {
   let sym = Object.keys(price)[0];
   let data = price[sym]["USD"];
   let TileClass = index < 5 ? PriceTile : PriceTileCompact;
-  return <TileClass sym={sym} data={data} />;
+  return (
+    <AppContext.Consumer>
+      {({ currentFavorite, setCurrentFavorite }) => (
+        <TileClass
+          sym={sym}
+          data={data}
+          currentFavorite={currentFavorite === sym}
+          setCurrentFavorite={() => setCurrentFavorite(sym)}
+        />
+      )}
+    </AppContext.Consumer>
+  );
 };
