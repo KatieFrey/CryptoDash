@@ -10,7 +10,7 @@ export const AppContext = React.createContext();
 
 const MAX_FAVORITES = 10;
 
-export class AppProvider extends React.Component {
+class AppProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,7 +47,7 @@ export class AppProvider extends React.Component {
     let returnData = [];
     for (let i = 0; i < this.state.favorites.length; i++) {
       try {
-        let priceData = await cc.priceFull(this.state.favorites[i], "USD");
+        let priceData = await cc.priceFull(this.state.favorites[i], "USD", {});
         returnData.push(priceData);
       } catch (e) {
         console.warn("Fetch price error: ", e);
@@ -73,10 +73,14 @@ export class AppProvider extends React.Component {
 
   //Arrow function binds to the 'this' property
   confirmFavorites = () => {
+    let currentFavorite = this.state.favorites[0];
     this.setState(
       {
         firstVisit: false,
-        page: "dashboard"
+        page: "dashboard",
+        currentFavorite,
+        prices: null,
+        historical: null
       },
       () => {
         this.fetchPrices();
@@ -85,7 +89,8 @@ export class AppProvider extends React.Component {
     localStorage.setItem(
       "cryptoDash",
       JSON.stringify({
-        favorites: this.state.favorites
+        favorites: this.state.favorites,
+        currentFavorite
       })
     );
   };
@@ -114,3 +119,5 @@ export class AppProvider extends React.Component {
     );
   }
 }
+
+export default AppProvider;
