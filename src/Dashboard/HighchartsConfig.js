@@ -1,9 +1,5 @@
-export default historical => {
+export default () => {
   return {
-    title: {
-      text: ""
-    },
-
     yAxis: {
       title: {
         text: "Price"
@@ -25,7 +21,7 @@ export default historical => {
       }
     },
 
-    series: historical,
+    //series: historical,
 
     responsive: {
       rules: [
