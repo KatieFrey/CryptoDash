@@ -1,5 +1,8 @@
 export default historical => {
   return {
+    title: {
+      text: ""
+    },
     yAxis: {
       title: {
         text: "Price"
